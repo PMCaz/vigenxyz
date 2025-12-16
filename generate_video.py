@@ -25,11 +25,13 @@ except ImportError:
 OUTPUT_DIR = Path(__file__).parent / "output"
 OUTPUT_DIR.mkdir(exist_ok=True)
 
-# Base style prompt for Van Gogh-inspired look
-VAN_GOGH_STYLE = """Van Gogh inspired digital painting style with visible bold brushstrokes and swirling textures.
-Rich impasto technique with thick paint application. Strong contrast between warm golden/amber and deep blue/teal colors.
-Dramatic directional lighting with long shadows. Post-impressionist color palette.
-Painterly textures throughout. Emotional and atmospheric. 9:16 vertical composition."""
+# Enhanced artistic style prompt for human-like painting look
+VAN_GOGH_STYLE = """Traditional oil painting in Van Gogh post-impressionist style.
+Thick impasto brushstrokes with visible paint texture and canvas grain. Hand-painted aesthetic with organic imperfections.
+Rich color mixing on canvas - warm golden ochre and amber contrasting with Prussian blue and teal.
+Expressive brushwork like Starry Night. Natural color transitions, not digitally smooth.
+Dramatic chiaroscuro lighting. Emotional depth. Museum quality fine art. 9:16 vertical composition.
+NOT digital art, NOT 3D render, NOT photorealistic. Pure traditional painting aesthetic."""
 
 # Scenes from scenes.md with Van Gogh style prompts
 SCENES = [
@@ -170,9 +172,9 @@ def generate_video_from_image(client, image_path: Path, prompt: str, output_path
 
             start_time = time.time()
 
-            # Generate video from image
+            # Generate video from image using Veo 3.1 for better quality
             operation = client.models.generate_videos(
-                model='veo-3.0-generate-001',
+                model='veo-3.1-generate-preview',
                 prompt=prompt,
                 image=reference_image,
                 config=config
@@ -397,8 +399,11 @@ def main():
         video_created = False
 
         if use_veo and not raw_video.exists():
-            # Animation prompt for Veo
-            animation_prompt = f"Gentle cinematic animation. {scene['camera']}. Subtle movement in scene elements - clouds drift slowly, leaves flutter, light shifts. Painterly Van Gogh style maintained. Smooth, peaceful motion. 8 seconds."
+            # Animation prompt for Veo - emphasize painterly motion
+            animation_prompt = f"""Gentle living painting animation like a Van Gogh artwork coming to life.
+{scene['camera']}. Subtle organic movement - brushstrokes seem to flow, colors breathe and shift naturally.
+Clouds drift with painted texture, light dances like in impressionist art. Maintain thick impasto oil painting look throughout.
+Movement should feel hand-animated, artistic, dreamlike. NOT realistic motion. 8 seconds of peaceful contemplation."""
 
             video_created = generate_video_from_image(
                 client, raw_image, animation_prompt, raw_video
