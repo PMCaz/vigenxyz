@@ -11,6 +11,7 @@ import os
 import sys
 import time
 import subprocess
+import platform
 from pathlib import Path
 
 try:
@@ -220,13 +221,40 @@ def add_text_overlay_to_video(input_video: Path, output_video: Path, text: str) 
     # Escape special characters for ffmpeg drawtext
     escaped_text = text.replace("\\", "\\\\").replace("'", "'\\''").replace(":", "\\:").replace("%", "\\%")
 
-    # Use a clean serif font - try multiple options
-    font_options = [
-        "/System/Library/Fonts/Supplemental/Times New Roman.ttf",
-        "/System/Library/Fonts/Times.ttc",
-        "/System/Library/Fonts/NewYork.ttf",
-        "/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf",
-    ]
+    # Use a clean serif font - try multiple cross-platform options
+    system = platform.system().lower()
+
+    # Platform-specific font paths
+    if system == "windows":
+        font_options = [
+            "C:\\Windows\\Fonts\\times.ttf",
+            "C:\\Windows\\Fonts\\timesbd.ttf",
+            "C:\\Windows\\Fonts\\arial.ttf",  # fallback
+        ]
+    elif system == "linux":
+        font_options = [
+            "/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf",
+            "/usr/share/fonts/truetype/liberation/LiberationSerif-Regular.ttf",
+            "/usr/share/fonts/truetype/freefont/FreeSerif.ttf",
+            "/usr/share/fonts/TTF/DejaVuSerif.ttf",  # alternative path
+        ]
+    elif system == "darwin":  # macOS
+        font_options = [
+            "/System/Library/Fonts/Supplemental/Times New Roman.ttf",
+            "/System/Library/Fonts/Times.ttc",
+            "/System/Library/Fonts/NewYork.ttf",
+            "/Library/Fonts/Times New Roman.ttf",  # alternative path
+        ]
+    else:
+        # Fallback for other systems
+        font_options = []
+
+    # Add common FFmpeg font names as fallback
+    font_options.extend([
+        "Times-Roman",  # Common FFmpeg font name
+        "Times",        # Generic fallback
+        "serif",        # Generic serif fallback
+    ])
 
     font_file = None
     for font in font_options:

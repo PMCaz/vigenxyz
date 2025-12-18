@@ -12,6 +12,7 @@ This project creates a 32-second motivational video featuring four scenes inspir
 - Python 3.7+
 - ffmpeg (for video processing)
 - Internet connection (for API calls)
+- Cross-platform support: Windows, macOS, Linux
 
 ### Python Dependencies
 ```bash
@@ -112,8 +113,12 @@ pip install google-genai
 - Check internet connection and API quota
 
 **FFmpeg Errors**
-- Ensure ffmpeg is installed: `brew install ffmpeg` (macOS)
+- Ensure ffmpeg is installed:
+  - macOS: `brew install ffmpeg`
+  - Ubuntu/Debian: `sudo apt install ffmpeg`
+  - Windows: Download from https://ffmpeg.org/download.html
 - Check that all output paths are writable
+- Font issues: The script tries multiple font paths per platform; if text overlay fails, ensure system fonts are available
 
 ## 📝 Customization
 
