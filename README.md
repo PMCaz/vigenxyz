@@ -12,7 +12,7 @@ This project creates a 32-second motivational video featuring four scenes inspir
 - Python 3.7+
 - ffmpeg (for video processing)
 - Internet connection (for API calls)
-- Cross-platform support: Windows, macOS, Linux-based
+- Cross-platform support: Windows, macOS, Linux
 
 ### Python Dependencies
 ```bash
